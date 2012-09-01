@@ -12,11 +12,19 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor redColor];
+
     }
 
     return self;
 }
 
+- (void)layoutSubviews {
+    if (self.event.color) {
+        self.backgroundColor = self.event.color;
+    }
+    else {
+        self.backgroundColor = [UIColor darkGrayColor];
+    }
+}
 
 @end

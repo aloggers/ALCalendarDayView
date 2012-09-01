@@ -18,14 +18,16 @@
 
 - (NSArray*)calendarEventsForDate:(NSDate*)date {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
     NSMutableArray* result = [[NSMutableArray alloc] init];
     ALCalendarEvent* workEvent = [[ALCalendarEvent alloc] init];
     workEvent.start = [dateFormatter dateFromString:@"2012-08-08 09:00"];
     workEvent.end = [dateFormatter dateFromString:@"2012-08-08 19:00"];
+    workEvent.color = [UIColor colorWithRed:0.1 green:0.2 blue:0.9 alpha:0.4];
     ALCalendarEvent* dinnerEvent = [[ALCalendarEvent alloc] init];
     dinnerEvent.start = [dateFormatter dateFromString:@"2012-08-08 13:00"];
     dinnerEvent.end = [dateFormatter dateFromString:@"2012-08-08 14:00"];
+    dinnerEvent.color = [UIColor colorWithRed:0 green:0.9 blue:0.1 alpha:0.4];
     [result addObject:dinnerEvent];
     [result addObject:workEvent];
     return result;
