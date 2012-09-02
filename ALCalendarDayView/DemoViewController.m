@@ -12,7 +12,6 @@
     [super viewDidLoad];
     ALCalendarDayView* calendarDayView = [[ALCalendarDayView alloc] initWithFrame:CGRectMake(0, 0, 320, 416)];
     calendarDayView.dataSource = self;
-    [calendarDayView reloadData];
     [self.view addSubview:calendarDayView];
 }
 
