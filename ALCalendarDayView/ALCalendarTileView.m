@@ -2,8 +2,6 @@
 #import "ALCalendarEvent.h"
 
 @interface ALCalendarTileView()
-@property (nonatomic, strong) UILabel* titleLabel;
-@property (nonatomic, strong) UILabel* descriptionLabel;
 @end
 
 @implementation ALCalendarTileView {
@@ -42,20 +40,11 @@
     return self;
 }
 
-- (void)setEvent:(ALCalendarEvent*)event {
-    _event = event;
-    _titleLabel.text = event.title;
-    _descriptionLabel.text = event.description;
-    self.backgroundColor = event.color;
+- (id)init {
+    return [self initWithFrame:CGRectZero];
 }
 
 - (void)layoutSubviews {
-    if (self.event.color) {
-        self.backgroundColor = self.event.color;
-    }
-    else {
-        self.backgroundColor = [UIColor darkGrayColor];
-    }
     _titleLabel.frame = CGRectMake(6, 3, self.frame.size.width - 12, 16);
     _descriptionLabel.frame = CGRectMake(6, _titleLabel.frame.size.height + 2,
             self.frame.size.width - 12, self.frame.size.height - _titleLabel.frame.size.height - 14);

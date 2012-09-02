@@ -1,19 +1,16 @@
 #import "ALCalendarDayView.h"
-#import "ALCalendarDayEventsView.h"
+
+@interface ALCalendarDayView ()
+@end
 
 @implementation ALCalendarDayView {
 @private
-    __weak id <ALCalendarDayViewDataSource> _dataSource;
     UIScrollView* _scrollView;
-
     ALCalendarDayEventsView* _eventsView;
-    BOOL _amPmFormat;
-    __weak id <ALCalendarDayViewDelegate> _delegate;
 }
 
-@synthesize dataSource = _dataSource;
-@synthesize amPmFormat = _amPmFormat;
-@synthesize delegate = _delegate;
+@synthesize eventsView = _eventsView;
+
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -23,25 +20,11 @@
         _scrollView.contentSize = CGSizeMake(self.frame.size.width, 1078);
         _scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
         [self addSubview:_scrollView];
+
+        _eventsView = [[ALCalendarDayEventsView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1078)];
+        [_scrollView addSubview:_eventsView];
     }
     return self;
-}
-
-- (void)reloadData {
-    NSArray* events = [self.dataSource calendarEventsForDate:[NSDate date]];
-    _eventsView = [[ALCalendarDayEventsView alloc] initWithEvents:events];
-    _eventsView.amPmFormat = self.amPmFormat;
-    _eventsView.frame = CGRectMake(0, 0, self.frame.size.width, 1078);
-    NSArray* subviews = _scrollView.subviews;
-    for (UIView* subview in subviews) {
-        [subview removeFromSuperview];
-    }
-    [_scrollView addSubview:_eventsView];
-}
-
-- (void)setDataSource:(id <ALCalendarDayViewDataSource>)dataSource {
-    _dataSource = dataSource;
-    [self reloadData];
 }
 
 @end

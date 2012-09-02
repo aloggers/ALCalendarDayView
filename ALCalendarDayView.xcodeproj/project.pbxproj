@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		51CE0005609EFA3B204DB78C /* ALCalendarTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE08D4471E7A4FEECF2DF3 /* ALCalendarTileView.m */; };
+		51CE00EE268548EB4748695F /* CustomTileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE06E2C0918AF80734D3D4 /* CustomTileViewController.m */; };
+		51CE024CFA9EB161517C3612 /* DefaultStylesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE0CE0C0273F810DB5D35A /* DefaultStylesViewController.m */; };
 		51CE03C9DF659B6C329635EB /* ALCalendarEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE065CE090ABA938A63977 /* ALCalendarEvent.m */; };
 		51CE099D0752A8FDAB4F2CDA /* ALCalendarDayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE0476DB231483EEBA9D53 /* ALCalendarDayView.m */; };
 		51CE0CEA9ACACD90B2AAFF57 /* ALCalendarDayEventsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CE086D1CB9080ED90908ED /* ALCalendarDayEventsView.m */; };
@@ -40,11 +42,15 @@
 		51CE065CE090ABA938A63977 /* ALCalendarEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCalendarEvent.m; sourceTree = "<group>"; };
 		51CE066727FAED791CCD98A0 /* ALCalendarDayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCalendarDayView.h; sourceTree = "<group>"; };
 		51CE06A106087C173CCF05BC /* ALCalendarTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCalendarTileView.h; sourceTree = "<group>"; };
+		51CE06E2C0918AF80734D3D4 /* CustomTileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTileViewController.m; sourceTree = "<group>"; };
 		51CE074FAE1144DB42C44C72 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		51CE086D1CB9080ED90908ED /* ALCalendarDayEventsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCalendarDayEventsView.m; sourceTree = "<group>"; };
+		51CE088F3D2397A60E9D6C17 /* CustomTileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTileViewController.h; sourceTree = "<group>"; };
 		51CE08D4471E7A4FEECF2DF3 /* ALCalendarTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALCalendarTileView.m; sourceTree = "<group>"; };
+		51CE0B0CA8C4B9C9A9631F96 /* DefaultStylesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultStylesViewController.h; sourceTree = "<group>"; };
 		51CE0C1DE939B9C3725B84D5 /* ALCalendarDayEventsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCalendarDayEventsView.h; sourceTree = "<group>"; };
 		51CE0C93A360DF97C986EA90 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
+		51CE0CE0C0273F810DB5D35A /* DefaultStylesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultStylesViewController.m; sourceTree = "<group>"; };
 		51CE0E2D87233D29C1C95010 /* ALCalendarEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALCalendarEvent.h; sourceTree = "<group>"; };
 		FA5C1EEF4C85A8AA1593F80C /* ALCalendarDayView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ALCalendarDayView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5C1EEF4C85A8AA1593F815 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -121,6 +127,10 @@
 		FA5C1EEF4C85A8AA1593F81B /* ALCalendarDayView */ = {
 			isa = PBXGroup;
 			children = (
+				51CE088F3D2397A60E9D6C17 /* CustomTileViewController.h */,
+				51CE06E2C0918AF80734D3D4 /* CustomTileViewController.m */,
+				51CE0B0CA8C4B9C9A9631F96 /* DefaultStylesViewController.h */,
+				51CE0CE0C0273F810DB5D35A /* DefaultStylesViewController.m */,
 				51CE0C1DE939B9C3725B84D5 /* ALCalendarDayEventsView.h */,
 				51CE086D1CB9080ED90908ED /* ALCalendarDayEventsView.m */,
 				51CE074FAE1144DB42C44C72 /* DemoViewController.h */,
@@ -277,6 +287,8 @@
 				51CE03C9DF659B6C329635EB /* ALCalendarEvent.m in Sources */,
 				51CE0E12E3A5D2D6B5A4413C /* DemoViewController.m in Sources */,
 				51CE0CEA9ACACD90B2AAFF57 /* ALCalendarDayEventsView.m in Sources */,
+				51CE024CFA9EB161517C3612 /* DefaultStylesViewController.m in Sources */,
+				51CE00EE268548EB4748695F /* CustomTileViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

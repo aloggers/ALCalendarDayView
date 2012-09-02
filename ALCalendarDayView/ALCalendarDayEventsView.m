@@ -16,9 +16,16 @@
 @private
     UIView* _tilesContainerView;
     BOOL _amPmFormat;
+    __weak id <ALCalendarDayEventsViewDataSource> _dataSource;
+    NSDate* _date;
+    __weak id <ALCalendarDayEventsViewDelegate> _delegate;
 }
 @synthesize tilesContainerView = _tilesContainerView;
 @synthesize amPmFormat = _amPmFormat;
+@synthesize dataSource = _dataSource;
+@synthesize date = _date;
+@synthesize delegate = _delegate;
+
 
 static NSArray *timeStrings;
 static NSArray *hoursStrings;
@@ -34,28 +41,54 @@ static NSArray *hoursStrings;
     }
 }
 
-- (id)initWithEvents:(NSArray* )events {
-    self = [super initWithFrame:CGRectZero];
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
     if (self) {
-        NSMutableArray* tileViews = [[NSMutableArray alloc] init];
         self.tilesContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        for (ALCalendarEvent* event in events) {
-            CGFloat yStartPosition = [self yValueForTime:[self hourFromDate:event.start]] - kTopLineBuffer;
-            CGFloat yEndPosition = [self yValueForTime:[self hourFromDate:event.end]] - kTopLineBuffer;
-            ALCalendarTileView* tileView = [[ALCalendarTileView alloc] initWithFrame:CGRectMake(0, yStartPosition, 0, yEndPosition - yStartPosition)];
-            tileView.event = event;
-            [tileViews addObject:tileView];
-            [self.tilesContainerView addSubview:tileView];
-        }
         [self addSubview:self.tilesContainerView];
     }
     return self;
 }
 
-- (CGFloat)hourFromDate:(NSDate*)date {
-    NSDateComponents* components = [[NSCalendar currentCalendar] components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
-    return components.hour + components.minute / 60.0f;
+- (void)setDataSource:(id <ALCalendarDayEventsViewDataSource>)dataSource {
+    _dataSource = dataSource;
+    [self reloadData];
 }
+
+- (void)setDelegate:(id <ALCalendarDayEventsViewDelegate>)delegate {
+    _delegate = delegate;
+    if (_dataSource != nil) {
+        [self reloadData];
+    }
+}
+
+- (void)reloadData {
+    [self.tilesContainerView.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop) {
+        UIView* subview = (UIView* )obj;
+        [subview removeFromSuperview];
+    }];
+    NSArray* events = [self.dataSource calendarEventsForDate:self.date];
+
+    for (ALCalendarEvent* event in events) {
+        CGFloat yStartPosition = [self yValueForTime:[self hourFromDate:event.start]] - kTopLineBuffer;
+        CGFloat yEndPosition = [self yValueForTime:[self hourFromDate:event.end]] - kTopLineBuffer;
+        ALCalendarTileView* tileView = nil;
+        if ([self.delegate respondsToSelector:@selector(tileViewForEvent:)]) {
+            tileView = [self.delegate tileViewForEvent:event];
+            tileView.frame = CGRectMake(0, yStartPosition, 0, yEndPosition - yStartPosition);
+        }
+        else {
+            tileView = [[ALCalendarTileView alloc] initWithFrame:CGRectMake(0, yStartPosition, 0, yEndPosition - yStartPosition)];
+            tileView.titleLabel.text = event.title;
+            tileView.descriptionLabel.text = event.description;
+            tileView.backgroundColor = event.color;
+        }
+        tileView.event = event;
+        [self.tilesContainerView addSubview:tileView];
+    }
+}
+
+#pragma mark - Drawing
 
 - (void)layoutSubviews {
     CGFloat width = self.bounds.size.width - kTileLeftSide - kTileRightSide;
@@ -155,6 +188,13 @@ static NSArray *hoursStrings;
                     textSize.width, textSize.height) withFont:textFont];
         }
     }
+}
+
+#pragma mark - Private
+
+- (CGFloat)hourFromDate:(NSDate*)date {
+    NSDateComponents* components = [[NSCalendar currentCalendar] components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    return components.hour + components.minute / 60.0f;
 }
 
 - (CGFloat)yValueForTime:(CGFloat)time {
