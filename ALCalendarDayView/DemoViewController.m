@@ -28,6 +28,12 @@
     else if (indexPath.row == 1) {
         tableViewCell.textLabel.text = @"Custom tiles";
     }
+    else if (indexPath.row == 2) {
+        tableViewCell.textLabel.text = @"More customizations";
+    }
+    else if (indexPath.row == 3) {
+        tableViewCell.textLabel.text = @"2 days and more";
+    }
     return tableViewCell;
 }
 
@@ -39,6 +45,12 @@
     else if (indexPath.row == 1) {
         CustomTileViewController* customTileViewController = [[CustomTileViewController alloc] init];
         [self.navigationController pushViewController:customTileViewController animated:YES];
+    }
+    else {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Not implemented" message:@"Planned but not implemented" delegate:nil
+                                                  cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        [alertView show];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
