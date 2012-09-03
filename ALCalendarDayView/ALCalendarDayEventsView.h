@@ -16,9 +16,13 @@
 @property (nonatomic) BOOL amPmFormat;
 @property (nonatomic, strong) NSDate* date;
 
+@property (nonatomic) CGFloat leftMargin;
+@property (nonatomic) CGFloat rightMargin;
+@property (nonatomic) CGFloat topMargin;
+
 @property (nonatomic, weak) id<ALCalendarDayEventsViewDataSource> dataSource;
 @property (nonatomic, weak) id<ALCalendarDayEventsViewDelegate> delegate;
 
-
 - (void)reloadData;
+
 @end

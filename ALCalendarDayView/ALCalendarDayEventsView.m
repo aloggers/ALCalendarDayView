@@ -2,29 +2,29 @@
 #import "ALCalendarEvent.h"
 #import "ALCalendarTileView.h"
 
-#define kTileLeftSide 52.0f
-#define kTileRightSide 10.0f
-
-#define kTopLineBuffer 11.0
-#define kSideLineBuffer 50.0
-
 @interface ALCalendarDayEventsView ()
-@property (nonatomic, strong) UIView* tilesContainerView;
+@property (nonatomic, strong) NSMutableArray* tileViews;
 @end
 
 @implementation ALCalendarDayEventsView {
 @private
-    UIView* _tilesContainerView;
     BOOL _amPmFormat;
     __weak id <ALCalendarDayEventsViewDataSource> _dataSource;
     NSDate* _date;
     __weak id <ALCalendarDayEventsViewDelegate> _delegate;
+    CGFloat _rightMargin;
+    CGFloat _leftMargin;
+    NSMutableArray* _tileViews;
+    CGFloat _topMargin;
 }
-@synthesize tilesContainerView = _tilesContainerView;
 @synthesize amPmFormat = _amPmFormat;
 @synthesize dataSource = _dataSource;
 @synthesize date = _date;
 @synthesize delegate = _delegate;
+@synthesize rightMargin = _rightMargin;
+@synthesize leftMargin = _leftMargin;
+@synthesize tileViews = _tileViews;
+@synthesize topMargin = _topMargin;
 
 
 static NSArray *timeStrings;
@@ -44,8 +44,9 @@ static NSArray *hoursStrings;
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.tilesContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        [self addSubview:self.tilesContainerView];
+        self.leftMargin = 50.0f;
+        self.rightMargin = 10.0f;
+        self.topMargin = 10.0f;
     }
     return self;
 }
@@ -63,15 +64,16 @@ static NSArray *hoursStrings;
 }
 
 - (void)reloadData {
-    [self.tilesContainerView.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop) {
+    [self.tileViews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop) {
         UIView* subview = (UIView* )obj;
         [subview removeFromSuperview];
     }];
     NSArray* events = [self.dataSource calendarEventsForDate:self.date];
+    self.tileViews = [[NSMutableArray alloc] init];
 
     for (ALCalendarEvent* event in events) {
-        CGFloat yStartPosition = [self yValueForTime:[self hourFromDate:event.start]] - kTopLineBuffer;
-        CGFloat yEndPosition = [self yValueForTime:[self hourFromDate:event.end]] - kTopLineBuffer;
+        CGFloat yStartPosition = self.topMargin + [self yValueForTime:[self hourFromDate:event.start]];
+        CGFloat yEndPosition = self.topMargin + [self yValueForTime:[self hourFromDate:event.end]];
         ALCalendarTileView* tileView = nil;
         if ([self.delegate respondsToSelector:@selector(tileViewForEvent:)]) {
             tileView = [self.delegate tileViewForEvent:event];
@@ -84,25 +86,25 @@ static NSArray *hoursStrings;
             tileView.backgroundColor = event.color;
         }
         tileView.event = event;
-        [self.tilesContainerView addSubview:tileView];
+        [self.tileViews addObject:tileView];
+        [self addSubview:tileView];
     }
 }
 
 #pragma mark - Drawing
 
 - (void)layoutSubviews {
-    CGFloat width = self.bounds.size.width - kTileLeftSide - kTileRightSide;
-    self.tilesContainerView.frame = CGRectMake(kTileLeftSide, kTopLineBuffer, 320- kTileLeftSide, self.frame.size.height - kTopLineBuffer);
+    CGFloat width = self.bounds.size.width - self.leftMargin - self.rightMargin;
 
     NSDate* lastEndDate = nil;
-    NSArray* sortedTiles = [self.tilesContainerView.subviews sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    NSArray* sortedTiles = [self.tileViews sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         ALCalendarTileView* tile1 = obj1;
         ALCalendarTileView* tile2 = obj2;
         NSComparisonResult startCompare = [tile1.event.start compare:tile2.event.start];
         return startCompare != NSOrderedSame ? startCompare : [tile1.event.end compare:tile2.event.end];
     }];
-    NSMutableArray* columns = [[NSMutableArray alloc] init];
 
+    NSMutableArray* columns = [[NSMutableArray alloc] init];
     for (ALCalendarTileView *tile in sortedTiles) {
         ALCalendarEvent* event = tile.event;
         if (lastEndDate != nil && [event.start compare:lastEndDate] >= 0 ) {
@@ -143,9 +145,9 @@ static NSArray *hoursStrings;
     CGContextSetShouldAntialias(g, NO);
     [[UIColor lightGrayColor] setStroke];
     for (NSInteger i = 0; i < 25; i++) {
-        CGFloat yVal = [self yValueForTime:i];
-        CGContextMoveToPoint(g, kSideLineBuffer, yVal);
-        CGContextAddLineToPoint(g, self.frame.size.width, yVal);
+        CGFloat yVal = self.topMargin + [self yValueForTime:i];
+        CGContextMoveToPoint(g, self.leftMargin, yVal);
+        CGContextAddLineToPoint(g, self.frame.size.width - self.rightMargin, yVal);
     }
     CGContextStrokePath(g);
 
@@ -155,9 +157,9 @@ static NSArray *hoursStrings;
     CGContextSetLineDash(g, 0, dashPattern, 2);
     for (NSInteger i = 0; i < 24; i++) {
         CGFloat time = (CGFloat)i + 0.5f;
-        CGFloat yVal = [self yValueForTime:time];
-        CGContextMoveToPoint(g, kSideLineBuffer, yVal);
-        CGContextAddLineToPoint(g, self.frame.size.width, yVal);
+        CGFloat yVal = self.topMargin + [self yValueForTime:time];
+        CGContextMoveToPoint(g, self.leftMargin, yVal);
+        CGContextAddLineToPoint(g, self.frame.size.width - self.rightMargin, yVal);
     }
     CGContextStrokePath(g);
 
@@ -167,10 +169,10 @@ static NSArray *hoursStrings;
     UIFont *numberFont = [UIFont boldSystemFontOfSize:14.0];
     NSArray* arrHours = self.amPmFormat ? timeStrings : hoursStrings;
     for (NSUInteger i = 0; i < 25; i++) {
-        CGFloat yVal = [self yValueForTime:(CGFloat)i];
+        CGFloat yVal = self.topMargin + [self yValueForTime:(CGFloat)i];
         NSString *number = [arrHours objectAtIndex:i];
         CGSize numberSize = [number sizeWithFont:numberFont];
-        [number drawInRect:CGRectMake(0, yVal - floor(numberSize.height / 2) - 1, kSideLineBuffer - 10, numberSize.height)
+        [number drawInRect:CGRectMake(0, yVal - floor(numberSize.height / 2) - 1, self.leftMargin - 10, numberSize.height)
                   withFont:numberFont
              lineBreakMode:UILineBreakModeTailTruncation
                  alignment:UITextAlignmentRight];
@@ -182,9 +184,9 @@ static NSArray *hoursStrings;
         UIFont *textFont = [UIFont systemFontOfSize:12.0];
         for (NSInteger i = 0; i < 25; i++) {
             NSString *text = i < 12 ? @"AM" : @"PM";
-            CGFloat yVal = [self yValueForTime:(CGFloat)i];
+            CGFloat yVal = self.topMargin + [self yValueForTime:(CGFloat)i];
             CGSize textSize = [text sizeWithFont:textFont];
-            [text drawInRect:CGRectMake(kSideLineBuffer - 7 - textSize.width, yVal - (textSize.height / 2),
+            [text drawInRect:CGRectMake(self.leftMargin - 7 - textSize.width, yVal - (textSize.height / 2),
                     textSize.width, textSize.height) withFont:textFont];
         }
     }
@@ -198,7 +200,7 @@ static NSArray *hoursStrings;
 }
 
 - (CGFloat)yValueForTime:(CGFloat)time {
-    return kTopLineBuffer + (44.0f * time);;
+    return (44.0f * time);
 }
 
 - (void)packEvents:(NSArray* )columns width:(CGFloat)width {
@@ -207,7 +209,7 @@ static NSArray *hoursStrings;
         NSArray* column = [columns objectAtIndex:i];
         for (NSUInteger j = 0; j < [column count]; j++) {
             ALCalendarTileView* tile = [column objectAtIndex:j];
-            tile.frame = CGRectMake(i*1.0/n*width, tile.frame.origin.y, width/n, tile.frame.size.height);
+            tile.frame = CGRectMake(self.leftMargin + i*1.0/n*width, tile.frame.origin.y, width/n, tile.frame.size.height);
         }
     }
 }
