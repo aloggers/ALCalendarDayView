@@ -4,35 +4,26 @@
 @interface ALCalendarTileView()
 @end
 
-@implementation ALCalendarTileView {
-@private
-    ALCalendarEvent* _event;
-    UILabel* _titleLabel;
-    UILabel* _descriptionLabel;
-}
-@synthesize event = _event;
-@synthesize titleLabel = _titleLabel;
-@synthesize descriptionLabel = _descriptionLabel;
-
+@implementation ALCalendarTileView
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
-        _titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-        [self addSubview:_titleLabel];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.titleLabel.backgroundColor = [UIColor clearColor];
+        self.titleLabel.textColor = [UIColor whiteColor];
+        self.titleLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+        self.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        [self addSubview:self.titleLabel];
 
-        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _descriptionLabel.backgroundColor = [UIColor clearColor];
-        _descriptionLabel.textColor = [UIColor whiteColor];
-        _descriptionLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
-        _descriptionLabel.font = [UIFont systemFontOfSize:12.0f];
-        _descriptionLabel.lineBreakMode = UILineBreakModeWordWrap;
-        _descriptionLabel.numberOfLines = 0;
-        [self addSubview:_descriptionLabel];
+        self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.descriptionLabel.backgroundColor = [UIColor clearColor];
+        self.descriptionLabel.textColor = [UIColor whiteColor];
+        self.descriptionLabel.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+        self.descriptionLabel.font = [UIFont systemFontOfSize:12.0f];
+        self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.descriptionLabel.numberOfLines = 0;
+        [self addSubview:self.descriptionLabel];
 
         self.backgroundColor = [UIColor darkGrayColor];
     }
@@ -45,9 +36,9 @@
 }
 
 - (void)layoutSubviews {
-    _titleLabel.frame = CGRectMake(6, 3, self.frame.size.width - 12, 16);
-    _descriptionLabel.frame = CGRectMake(6, _titleLabel.frame.size.height + 2,
-            self.frame.size.width - 12, self.frame.size.height - _titleLabel.frame.size.height - 14);
+    self.titleLabel.frame = CGRectMake(6, 3, self.frame.size.width - 12, 16);
+    self.descriptionLabel.frame = CGRectMake(6, self.titleLabel.frame.size.height + 2,
+            self.frame.size.width - 12, self.frame.size.height - self.titleLabel.frame.size.height - 14);
 }
 
 @end

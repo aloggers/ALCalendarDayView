@@ -6,26 +6,7 @@
 @property (nonatomic, strong) NSMutableArray* tileViews;
 @end
 
-@implementation ALCalendarDayEventsView {
-@private
-    BOOL _amPmFormat;
-    __weak id <ALCalendarDayEventsViewDataSource> _dataSource;
-    NSDate* _date;
-    __weak id <ALCalendarDayEventsViewDelegate> _delegate;
-    CGFloat _rightMargin;
-    CGFloat _leftMargin;
-    NSMutableArray* _tileViews;
-    CGFloat _topMargin;
-}
-@synthesize amPmFormat = _amPmFormat;
-@synthesize dataSource = _dataSource;
-@synthesize date = _date;
-@synthesize delegate = _delegate;
-@synthesize rightMargin = _rightMargin;
-@synthesize leftMargin = _leftMargin;
-@synthesize tileViews = _tileViews;
-@synthesize topMargin = _topMargin;
-
+@implementation ALCalendarDayEventsView
 
 static NSArray *timeStrings;
 static NSArray *hoursStrings;
@@ -168,14 +149,15 @@ static NSArray *hoursStrings;
     [[UIColor grayColor] set];
     UIFont *numberFont = [UIFont boldSystemFontOfSize:14.0];
     NSArray* arrHours = self.amPmFormat ? timeStrings : hoursStrings;
+    CGFloat numberWidth = self.amPmFormat ? self.leftMargin - 30 : self.leftMargin - 10;
     for (NSUInteger i = 0; i < 25; i++) {
         CGFloat yVal = self.topMargin + [self yValueForTime:(CGFloat)i];
         NSString *number = [arrHours objectAtIndex:i];
         CGSize numberSize = [number sizeWithFont:numberFont];
-        [number drawInRect:CGRectMake(0, yVal - floor(numberSize.height / 2) - 1, self.leftMargin - 10, numberSize.height)
+        [number drawInRect:CGRectMake(0, yVal - floor(numberSize.height / 2) - 1, numberWidth, numberSize.height)
                   withFont:numberFont
-             lineBreakMode:UILineBreakModeTailTruncation
-                 alignment:UITextAlignmentRight];
+             lineBreakMode:NSLineBreakByTruncatingTail
+                 alignment:NSTextAlignmentRight];
     }
 
     if (self.amPmFormat) {

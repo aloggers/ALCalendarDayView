@@ -4,24 +4,18 @@
 #import "ALCalendarTileView.h"
 
 @interface CustomTileView : ALCalendarTileView
+@property (nonatomic, strong) UIView* leftView;
 @property (nonatomic, strong) UIColor* leftViewBackgroundColor;
 @end
 
-@implementation CustomTileView {
-@private
-    UIView* _leftView;
-    UIColor* _leftViewBackgroundColor;
-}
-
-@synthesize leftViewBackgroundColor = _leftViewBackgroundColor;
-
+@implementation CustomTileView
 
 - (id)init {
     self = [super init];
     if (self) {
         self.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.2];
-        _leftView = [[UIView alloc] initWithFrame:CGRectZero];
-        [self addSubview:_leftView];
+        self.leftView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self addSubview:self.leftView];
 
         self.titleLabel.textColor = [UIColor darkGrayColor];
     }
@@ -29,8 +23,8 @@
 }
 
 - (void)layoutSubviews {
-    _leftView.frame = CGRectMake(0, 0, 10, self.frame.size.height);
-    _leftView.backgroundColor = self.leftViewBackgroundColor;
+    self.leftView.frame = CGRectMake(0, 0, 10, self.frame.size.height);
+    self.leftView.backgroundColor = self.leftViewBackgroundColor;
 
     self.titleLabel.frame = CGRectMake(20, 0, self.frame.size.width - 30, 15);
     self.titleLabel.shadowOffset = CGSizeZero;
@@ -41,13 +35,12 @@
 @interface CustomTileViewController () <ALCalendarDayEventsViewDataSource, ALCalendarDayEventsViewDelegate>
 @end
 
-@implementation CustomTileViewController {
-
-}
+@implementation CustomTileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     ALCalendarDayView* calendarDayView = [[ALCalendarDayView alloc] initWithFrame:CGRectMake(0, 0, 320, 416)];
+    calendarDayView.eventsView.amPmFormat = YES;
     calendarDayView.eventsView.dataSource = self;
     calendarDayView.eventsView.delegate = self;
     [self.view addSubview:calendarDayView];
@@ -90,7 +83,6 @@
     tileView.titleLabel.text = event.title;
     return tileView;
 }
-
 
 @end
 
